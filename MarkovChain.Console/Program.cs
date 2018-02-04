@@ -10,6 +10,7 @@
             List<double> list = new List<double>() { 1, 2, 3, 4, 5 };
             ChainWorker worker = new ChainWorker(list);
             worker.Activate();
+            worker.BuildChainMatrix();
             Console.WriteLine("Hello World!");
         }
     }

@@ -32,5 +32,21 @@
                 return _isTopPosition;
             }
         }
+
+        public int GetState()
+        {
+            if (_isTopPosition)
+            {
+                return 1;
+            }
+            else if (_isCurrentPosition)
+            {
+                return 0;
+            }
+            else
+            {
+                return 2;
+            }
+        }
     }
 }

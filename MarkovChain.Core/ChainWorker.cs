@@ -31,9 +31,15 @@
             }
         }
 
-        public void Calculate()
+        public double[,] BuildChainMatrix()
         {
-
+            double[,] array = new double[3, 3];
+            array[0, 0] = 1;
+            for (int i = 1; i < _predictSet.Count; i++)
+            {
+                array[_predictSet[i - 1].GetState(), _predictSet[i].GetState()]++;
+            }
+            return array;
         }
 
         public IList<Model> GetData()
