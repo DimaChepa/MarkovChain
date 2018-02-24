@@ -1,8 +1,7 @@
 ﻿namespace MarkovChain.Core
 {
     using System.Collections.Generic;
-
-    // Major refactoring needed
+    
     public class ChainWorker
     {
         private IList<double> _data;

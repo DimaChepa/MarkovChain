@@ -7,7 +7,9 @@
     {
         static void Main(string[] args)
         {
-            ChainWorker worker = new ChainWorker(GenerateTestData(100));
+            BreakdownEngine engine = new BreakdownEngine(GenerateTestData(1000));
+            var breakdowns = engine.GetBreakdowns();
+            ChainWorker worker = new ChainWorker(breakdowns);
             worker.BuildChainMatrix();
             PredictionProvider predictionProvider = new PredictionProvider(worker);
             string result = Model.ParseNextPosition(predictionProvider.Predict());
