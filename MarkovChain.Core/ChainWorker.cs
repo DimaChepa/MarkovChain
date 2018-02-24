@@ -1,6 +1,8 @@
 ﻿namespace MarkovChain.Core
 {
     using System.Collections.Generic;
+
+    // Major refactoring needed
     public class ChainWorker
     {
         private IList<double> _data;
@@ -8,9 +10,10 @@
         public ChainWorker(IList<double> data)
         {
             _data = data;
+            Activate();
         }
 
-        public void Activate()
+        private void Activate()
         {
             _predictSet = new List<Model>();
             _predictSet.Add(new Model(true, false, false));
@@ -31,7 +34,7 @@
             }
         }
 
-        public double[,] BuildChainMatrix()
+        public virtual double[,] BuildChainMatrix()
         {
             double[,] array = new double[3, 3];
             array[0, 0] = 1;
@@ -39,10 +42,19 @@
             {
                 array[_predictSet[i - 1].GetState(), _predictSet[i].GetState()]++;
             }
+
             return array;
         }
 
-        public IList<Model> GetData()
+        public virtual int CountStates
+        {
+            get
+            {
+                return Model.CountStates;
+            }
+        }
+
+        public virtual IList<Model> GetData()
         {
             return _predictSet;
         }

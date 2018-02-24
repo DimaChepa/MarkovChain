@@ -7,11 +7,25 @@
     {
         static void Main(string[] args)
         {
-            List<double> list = new List<double>() { 1, 2, 3, 4, 5 };
-            ChainWorker worker = new ChainWorker(list);
-            worker.Activate();
+            ChainWorker worker = new ChainWorker(GenerateTestData(100));
             worker.BuildChainMatrix();
-            Console.WriteLine("Hello World!");
+            PredictionProvider predictionProvider = new PredictionProvider(worker);
+            string result = Model.ParseNextPosition(predictionProvider.Predict());
+            Console.WriteLine(result);
+            Console.ReadLine();
+        }
+
+        static List<double> GenerateTestData(int count)
+        {
+
+             var randomList = new List<double>();
+
+             Random randNum = new Random();
+             for (int i = 0; i < count; i++)
+             {
+                 randomList.Add(randNum.NextDouble() * 100);
+             }
+            return randomList;
         }
     }
 }

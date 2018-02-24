@@ -48,5 +48,32 @@
                 return 2;
             }
         }
+
+        public static int CountStates
+        {
+            get
+            {
+                return 3;
+            }
+        }
+
+        public static string ParseNextPosition(int position)
+        {
+            switch (position)
+            {
+                case 1:
+                    {
+                        return "Top";
+                    }
+                case 2:
+                    {
+                        return "Bottom";
+                    }
+                default:
+                    {
+                        return "Current";
+                    }
+            }
+        }
     }
 }
