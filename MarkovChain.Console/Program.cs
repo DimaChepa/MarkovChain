@@ -7,13 +7,16 @@
     {
         static void Main(string[] args)
         {
-            BreakdownEngine engine = new BreakdownEngine(GenerateTestData(1000));
+            Console.Write("number of elements to generate: ");
+            int count = Convert.ToInt32(Console.ReadLine());            
+
+            BreakdownEngine engine = new BreakdownEngine(GenerateTestData(count));
             var breakdowns = engine.GetBreakdowns();
             ChainWorker worker = new ChainWorker(breakdowns);
             worker.BuildChainMatrix();
             PredictionProvider predictionProvider = new PredictionProvider(worker);
             string result = Model.ParseNextPosition(predictionProvider.Predict());
-            Console.WriteLine(result);
+            Console.WriteLine($"Next breakdown is: {result}");
             Console.ReadLine();
         }
 
