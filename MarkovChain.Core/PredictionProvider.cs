@@ -5,10 +5,12 @@
 
     public class PredictionProvider
     {
-        private readonly ChainWorker _chainWorker;
+        protected readonly ChainWorker _chainWorker;
+        protected double[,] _chainMatrix;
         public PredictionProvider(ChainWorker worker)
         {
             _chainWorker = worker;
+            _chainMatrix = _chainWorker.BuildChainMatrix();
         }
 
         public virtual int Predict()
@@ -18,7 +20,7 @@
             var listNumbersPositions = new List<double>();
             for (int i = 0; i < _chainWorker.CountStates; i++)
             {
-                listNumbersPositions.Add(_chainWorker.BuildChainMatrix()[lastItemState, i]);
+                listNumbersPositions.Add(_chainMatrix[lastItemState, i]);
             }
             var nextState = listNumbersPositions.IndexOf(listNumbersPositions.Max());
             return nextState;
