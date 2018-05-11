@@ -26,10 +26,15 @@
              var randomList = new List<double>();
 
              Random randNum = new Random();
-             for (int i = 0; i < count; i++)
-             {
-                randomList.Add(i);
-             }
+            /*for (int i = 0; i < count; i++)
+            {
+               randomList.Add(i);
+            }*/
+            randomList.Add(1);
+            randomList.Add(5);
+            randomList.Add(3);
+            randomList.Add(4);
+            randomList.Add(2);
             return randomList;
         }
     }
