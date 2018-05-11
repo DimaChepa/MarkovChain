@@ -23,23 +23,37 @@
             for (int i = 2; i < _data.Count; i++)
             {
                 var count = listPos.Last();
-                int countParentNodes = 1;
+                int countParentNodes = 0;
                 for (int j = 1; j <= count; j += 1)
                 {
-                    var kvp = _dictionary.Where(x => x.Key.B.Contains($"L{i - 1}P{j}")).First();
-                    var array = ParseKey(kvp.Key.B);
-                    startLimit = array[0];
-                    endLimit = array[0] + kvp.Value.A;
-                    AddMaxBreakdownToDictionary(startLimit, endLimit, i, countParentNodes);
-                    countParentNodes++;
+                    try
+                    {
+                        var kvp = _dictionary.Where(x => x.Key.B.Contains($"L{i - 1}P{j}")).First();
 
-                    startLimit = array[0] + kvp.Value.A;
-                    endLimit = array[1];
-                    AddMaxBreakdownToDictionary(startLimit, endLimit, i, countParentNodes);
-                    countParentNodes++;
+                        var array = ParseKey(kvp.Key.B);
+                        startLimit = array[0];
+                        endLimit = array[0] + kvp.Value.A;
+                        if (array[1] - array[0] > 1)
+                        {
+                            countParentNodes++;
+                            AddMaxBreakdownToDictionary(startLimit, endLimit, i, countParentNodes);
+                        }
+
+                        startLimit = array[0] + kvp.Value.A;
+                        endLimit = array[1];
+                        if (array[1] - array[0] > 1)
+                        {
+                            countParentNodes++;
+                            AddMaxBreakdownToDictionary(startLimit, endLimit, i, countParentNodes);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        continue;
+                    }
                 }
-                listPos.Add(count * 2);
-            }
+                listPos.Add(countParentNodes);
+           }
             return null;
         }
 
