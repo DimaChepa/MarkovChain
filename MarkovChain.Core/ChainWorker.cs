@@ -4,9 +4,9 @@
     
     public class ChainWorker
     {
-        private IList<double> _data;
+        private IList<BreakDownModel> _data;
         private IList<Model> _predictSet;
-        public ChainWorker(IList<double> data)
+        public ChainWorker(IList<BreakDownModel> data)
         {
             _data = data;
             Activate();
@@ -18,11 +18,11 @@
             _predictSet.Add(new Model(true, false, false));
             for (int i = 1; i < _data.Count; i++)
             {
-                if (_data[i] > _data[i - 1])
+                if (_data[i].Perpendicular > _data[i - 1].Perpendicular)
                 {
                     _predictSet.Add(new Model(false, false, true));
                 }
-                else if (_data[i] < _data[i - 1])
+                else if (_data[i].Perpendicular < _data[i - 1].Perpendicular)
                 {
                     _predictSet.Add(new Model(false, true, false));
                 }

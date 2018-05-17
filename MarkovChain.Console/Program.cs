@@ -30,11 +30,12 @@
             {
                 randomList.Add(randNum.NextDouble());
             }*/
-            randomList.Add(1);
-            randomList.Add(5);
-            randomList.Add(3);
-            randomList.Add(4);
             randomList.Add(2);
+            randomList.Add(4);
+            randomList.Add(3);
+            randomList.Add(5);
+            randomList.Add(4);
+            randomList.Add(1);
             return randomList;
         }
     }

@@ -6,15 +6,21 @@
 
     public class BreakdownEngine
     {
-        private const int _timePeriod = 5;
         private IList<double> _data;
         private Dictionary<A, B> _dictionary;
-        public BreakdownEngine(IList<double> data)
+        private StatisticService _statisticService;
+        public BreakdownEngine(IList<double> data) : this(data, new StatisticService(data))
         {
             _data = data;
             _dictionary = new Dictionary<A, B>();
         }
-        public virtual IList<double> GetBreakdowns()
+
+        public BreakdownEngine(IList<double> data, StatisticService statisticService)
+        {
+            _statisticService = statisticService;
+        }
+
+        public virtual IList<BreakDownModel> GetBreakdowns()
         {
             var startLimit = 0;
             var endLimit = _data.Count - 1;
@@ -31,20 +37,23 @@
                         var kvp = _dictionary.Where(x => x.Key.B.Contains($"L{i - 1}P{j}")).First();
 
                         var array = ParseKey(kvp.Key.B);
-                        startLimit = array[0];
-                        endLimit = array[0] + kvp.Value.A;
-                        if (array[1] - array[0] > 1)
+                        for (int k = 0; k < 2; k++)
                         {
-                            countParentNodes++;
-                            AddMaxBreakdownToDictionary(startLimit, endLimit, i, countParentNodes);
-                        }
-
-                        startLimit = array[0] + kvp.Value.A;
-                        endLimit = array[1];
-                        if (array[1] - array[0] > 1)
-                        {
-                            countParentNodes++;
-                            AddMaxBreakdownToDictionary(startLimit, endLimit, i, countParentNodes);
+                            if (k == 0)
+                            {
+                                startLimit = array[0];
+                                endLimit = array[0] + kvp.Value.A;
+                            }
+                            else
+                            {
+                                startLimit = array[0] + kvp.Value.A;
+                                endLimit = array[1];
+                            }
+                            if (array[1] - array[0] > 1)
+                            {
+                                countParentNodes++;
+                                AddMaxBreakdownToDictionary(startLimit, endLimit, i, countParentNodes);
+                            }
                         }
                     }
                     catch (Exception ex)
@@ -53,8 +62,36 @@
                     }
                 }
                 listPos.Add(countParentNodes);
-           }
-            return null;
+            }
+
+            var dictionaryWithoutAnomals = GetDictionaryWithoutAnomalValues();
+            var listBreakdowns = SortBreakDownDictionary(dictionaryWithoutAnomals);
+            return listBreakdowns;
+        }
+
+        private List<BreakDownModel> SortBreakDownDictionary(Dictionary<A, B> dictionary)
+        {
+            var dict = dictionary.OrderBy(x => ParseKey(x.Key.B)[0] + x.Value.A);
+            var newList = new List<BreakDownModel>();
+            foreach (var item in dict)
+            {
+                newList.Add(new BreakDownModel { Perpendicular = item.Value.C, Position = ParseKey(item.Key.B)[0] + item.Value.A });
+            }
+            return newList;
+        }
+
+        private Dictionary<A, B> GetDictionaryWithoutAnomalValues()
+        {
+            var deviation = 0.005;
+            Dictionary<A, B> resultDictionary = new Dictionary<A, B>();
+            foreach (var kp in _dictionary)
+            {
+                if (kp.Value.C > deviation)
+                {
+                    resultDictionary.Add(kp.Key, kp.Value);
+                }
+            }
+            return resultDictionary;
         }
 
         private int[] ParseKey(string key)
@@ -101,5 +138,11 @@
     {
         public int A { get; set; }
         public double C { get; set; }
+    }
+
+    public class BreakDownModel
+    {
+        public double Perpendicular { get; set; }
+        public int Position { get; set; }
     }
 }
