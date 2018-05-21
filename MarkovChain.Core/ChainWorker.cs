@@ -42,6 +42,23 @@
                 array[_predictSet[i - 1].GetState(), _predictSet[i].GetState()]++;
             }
 
+            for (int i = 0; i < 3; i++)
+            {
+                double sum = 0;
+                for (int j = 0; j < 3; j++)
+                {
+                    sum += array[i, j];
+                }
+                for (int j = 0; j < 3; j++)
+                {
+                    array[i, j] = array[i, j] / sum;
+                    if (double.IsNaN(array[i, j]))
+                    {
+                        array[i, j] = 0;
+                    }
+                }
+            }
+
             return array;
         }
 
