@@ -2,9 +2,30 @@
 <html>
 <head>
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#load").bind("click", function () {
+                let _this = $("#file")[0];
+                let file = new FormData();
+                file.append('File', _this.files[0])
+                $.ajax({
+                    url: "/Home/Valid",
+                    type: "POST",
+                    data: file,
+                    processData: false,
+                    contentType: false
+                })
+            })
+        })
+    </script>
     <script src="~/Scripts/1.js"></script>
 </head>
-<body>    
-    <div id="chartContainer" style="position: relative; top: 200px; height: 400px; width: 100%;"></div>
+<body>
+    <input type="file" id="file"/>
+    <button id="load">Завантажити</button>
+    <div id="chartContainer"></div>
+    <link rel="stylesheet" href="~/styles.css" type="text/css" />
 </body>
 </html>
