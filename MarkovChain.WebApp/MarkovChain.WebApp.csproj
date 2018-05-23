@@ -15,10 +15,11 @@
 
   <ItemGroup>
     <Folder Include="Styles\" />
+    <Folder Include="wwwroot\Data\" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\Scripts\1.js" />
+    <ProjectReference Include="..\MarkovChain.Core\MarkovChain.Core.csproj" />
   </ItemGroup>
 
 </Project>

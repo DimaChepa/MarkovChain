@@ -5,6 +5,49 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script type="text/javascript">
+        function A() {
+            var b = []
+            b.push({ x: new Date(2016, 00, 1), y: 61, indexLabel: "value", markerType: "circle", markerColor: "#6B8E23" })
+            b.push({ x: new Date(2016, 01, 1), y: 71, indexLabel: "value", markerType: "circle", markerColor: "#6B8E23" })
+            b.push({ x: new Date(2016, 02, 1), y: 55, indexLabel: "value", markerType: "circle", markerColor: "tomato" })
+            b.push({ x: new Date(2016, 03, 1), y: 50, indexLabel: "value", markerType: "circle", markerColor: "tomato" })
+            b.push({ x: new Date(2016, 04, 1), y: 65, indexLabel: "value", markerType: "circle", markerColor: "#6B8E23" })
+            b.push({ x: new Date(2016, 05, 1), y: 85, indexLabel: "value", markerType: "circle", markerColor: "#6B8E23" })
+            b.push({ x: new Date(2016, 06, 1), y: 68, indexLabel: "value", markerType: "circle", markerColor: "tomato" })
+            b.push({ x: new Date(2016, 07, 1), y: 28, indexLabel: "value", markerType: "circle", markerColor: "tomato" })
+            b.push({ x: new Date(2016, 08, 1), y: 34, indexLabel: "value", markerType: "circle", markerColor: "#6B8E23" })
+            b.push({ x: new Date(2016, 09, 1), y: 24, indexLabel: "value", markerType: "circle", markerColor: "tomato" })
+            b.push({ x: new Date(2016, 10, 1), y: 44, indexLabel: "value", markerType: "circle", markerColor: "#6B8E23" })
+            b.push({ x: new Date(2016, 11, 1), y: 35, indexLabel: "value", markerType: "circle", markerColor: "tomato" })
+            return b;
+        }
+        function enableChart() {
+            var chart = new CanvasJS.Chart("chartContainer", {
+                theme: "light2",
+                animationEnabled: true,
+                title: {
+                    text: "Share Value - 2016"
+                },
+                axisX: {
+                    interval: 1,
+                    intervalType: "month",
+                    valueFormatString: "MMM"
+                },
+                axisY: {
+                    title: "Price (in USD)",
+                    valueFormatString: "$#0"
+                },
+                data: [{
+                    type: "line",
+                    markerSize: 12,
+                    xValueFormatString: "MMM, YYYY",
+                    yValueFormatString: "$###.#",
+                    dataPoints: A()
+                }]
+            });
+            chart.render();
+            $("#chartContainer").css("visibility", "visible")
+        }
         $(document).ready(function () {
             $("#load").bind("click", function () {
                 let _this = $("#file")[0];
@@ -15,12 +58,12 @@
                     type: "POST",
                     data: file,
                     processData: false,
-                    contentType: false
+                    contentType: false,
+                    success: enableChart()
                 })
             })
         })
     </script>
-    <script src="~/Scripts/1.js"></script>
 </head>
 <body>
     <input type="file" id="file"/>
