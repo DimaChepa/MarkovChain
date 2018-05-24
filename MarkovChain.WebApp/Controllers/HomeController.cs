@@ -9,6 +9,7 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using MarkovChain.WebApp.Models;
 using MarkovChain.Core;
+using Newtonsoft.Json;
 
 namespace MarkovChain.WebApp.Controllers
 {
@@ -29,7 +30,7 @@ namespace MarkovChain.WebApp.Controllers
         [HttpPost]
         public IActionResult Valid(IFormFile file)
         {
-            var listViews = new List<DataViewModel>();
+            List<DataViewModel> listViews = new List<DataViewModel>();
             if (file.Length > 0)
             {
                 ReadFile(file);
@@ -53,14 +54,23 @@ namespace MarkovChain.WebApp.Controllers
                     }
                 }
             }
-            return Json(listViews);
+            string json = JsonConvert.SerializeObject(listViews);
+            System.IO.File.WriteAllText(Path.Combine(_env.WebRootPath, "Data", "1.json"), json);
+            return Ok(listViews);
         }
 
 
         private void RemoveFile(IFormFile file)
         {
             string directoryPath = Path.Combine(_env.WebRootPath, "Data");
+            
             string filePath = Path.Combine(directoryPath, file.FileName);
+            string fileDataPath = Path.Combine(directoryPath, "1.json");
+            if (System.IO.File.Exists(fileDataPath))
+            {
+                System.IO.File.Delete(fileDataPath);
+            }
+
             if (System.IO.File.Exists(filePath))
             {
                 System.IO.File.Delete(filePath);

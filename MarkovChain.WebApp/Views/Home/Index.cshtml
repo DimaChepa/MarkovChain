@@ -7,18 +7,16 @@
     <script type="text/javascript">
         function A() {
             var b = []
-            b.push({ x: new Date(2016, 00, 1), y: 61, indexLabel: "value", markerType: "circle", markerColor: "#6B8E23" })
-            b.push({ x: new Date(2016, 01, 1), y: 71, indexLabel: "value", markerType: "circle", markerColor: "#6B8E23" })
-            b.push({ x: new Date(2016, 02, 1), y: 55, indexLabel: "value", markerType: "circle", markerColor: "tomato" })
-            b.push({ x: new Date(2016, 03, 1), y: 50, indexLabel: "value", markerType: "circle", markerColor: "tomato" })
-            b.push({ x: new Date(2016, 04, 1), y: 65, indexLabel: "value", markerType: "circle", markerColor: "#6B8E23" })
-            b.push({ x: new Date(2016, 05, 1), y: 85, indexLabel: "value", markerType: "circle", markerColor: "#6B8E23" })
-            b.push({ x: new Date(2016, 06, 1), y: 68, indexLabel: "value", markerType: "circle", markerColor: "tomato" })
-            b.push({ x: new Date(2016, 07, 1), y: 28, indexLabel: "value", markerType: "circle", markerColor: "tomato" })
-            b.push({ x: new Date(2016, 08, 1), y: 34, indexLabel: "value", markerType: "circle", markerColor: "#6B8E23" })
-            b.push({ x: new Date(2016, 09, 1), y: 24, indexLabel: "value", markerType: "circle", markerColor: "tomato" })
-            b.push({ x: new Date(2016, 10, 1), y: 44, indexLabel: "value", markerType: "circle", markerColor: "#6B8E23" })
-            b.push({ x: new Date(2016, 11, 1), y: 35, indexLabel: "value", markerType: "circle", markerColor: "tomato" })
+            $.getJSON("/Data/1.json", function (data) {
+                $.each(data, function (key, value) {
+                    if (value.IsBreakdown == true) {
+                        b.push({ x: key + 1, y: value.Value, indexLabel: "changePoint", markerType: "circle", markerColor: "red" })
+                    }
+                    else { 
+                        b.push({ x: key + 1, y: value.Value, indexLabel: "value", markerType: "circle", markerColor: "#6B8E23" })
+                    }                    
+                })
+            })
             return b;
         }
         function enableChart() {
@@ -46,7 +44,6 @@
                 }]
             });
             chart.render();
-            $("#chartContainer").css("visibility", "visible")
         }
         $(document).ready(function () {
             $("#load").bind("click", function () {
@@ -59,15 +56,24 @@
                     data: file,
                     processData: false,
                     contentType: false,
-                    success: enableChart()
+                    success: function () { 
+                        $("#chartContainer").css("visibility", "visible")
+                    }
                 })
             })
         })
+
+        $(document).ready(function () {
+            $("#count").bind("click", function () {
+                return enableChart()
+            })
+        })    
     </script>
 </head>
 <body>
     <input type="file" id="file"/>
     <button id="load">Завантажити</button>
+    <button id="count">Порахувати</button>
     <div id="chartContainer"></div>
     <link rel="stylesheet" href="~/styles.css" type="text/css" />
 </body>
